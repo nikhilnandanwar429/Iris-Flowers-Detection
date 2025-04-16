@@ -51,7 +51,7 @@ const PredictForm = () => {
         <button type="submit">Predict</button>
       </form>
       {error && <p className="error">{error}</p>}
-      {prediction (
+      {prediction && (
         <p>Prediction: {classNames[prediction]}</p>
       )}
     </div>
