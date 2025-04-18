@@ -5,7 +5,6 @@ const PredictForm = () => {
   const [prediction, setPrediction] = useState(null);
   const [error, setError] = useState('');
 
-  // Map prediction index to class name
   const classNames = {
     0: 'Iris Setosa',
     1: 'Iris Versicolor',
@@ -22,6 +21,7 @@ const PredictForm = () => {
     formData.append('d', inputs.d);
 
     try {
+      // Replace with your Render backend URL (e.g., "https://your-service.onrender.com/predict")
       const response = await fetch('http://localhost:5000/predict', {
         method: 'POST',
         body: formData
@@ -40,6 +40,7 @@ const PredictForm = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        {/* Input fields remain the same */}
         <input type="number" step="0.01" name="a" placeholder="Sepal Length" required 
                onChange={(e) => setInputs({...inputs, a: e.target.value})} />
         <input type="number" step="0.01" name="b" placeholder="Sepal Width" required 

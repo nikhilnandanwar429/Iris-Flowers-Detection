@@ -1,1 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+
+# Environment
 .env
+
+# Data
+*.pkl  # Only add this if you don't want to commit the model file
+
+# Editor/OS
+.DS_Store

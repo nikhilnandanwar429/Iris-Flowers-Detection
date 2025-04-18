@@ -3,14 +3,14 @@ from flask_cors import CORS
 import pickle
 import numpy as np
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # Add this
 
-load_dotenv()
+load_dotenv()  # Load environment variables from .env
 
 model = pickle.load(open('iri.pkl', 'rb'))
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS
+CORS(app)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -26,5 +26,5 @@ def predict():
         return jsonify({'error': str(e)}), 400
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 5000))
-    app.run(debug=True, port=port)
+    port = int(os.getenv("PORT", 5000))  # Get PORT from environment variable
+    app.run(host='0.0.0.0', port=port, debug=False)  # Disable debug mode
