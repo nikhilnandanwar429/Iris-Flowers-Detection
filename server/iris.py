@@ -1,20 +1,28 @@
-# iris.py
-import pandas as pd
-from sklearn.preprocessing import LabelEncoder
+# Import required libraries
+from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import pandas as pd
 import pickle
 
-df = pd.read_csv('iris.data')
-X = df.iloc[:, 0:4].values
-y = df.iloc[:, 4].values
+iris = load_iris()
+X = pd.DataFrame(iris.data, columns=iris.feature_names)
+y = iris.target
 
-le = LabelEncoder()
-y = le.fit_transform(y)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-model = SVC(kernel='linear').fit(X_train, y_train)
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
 
-# Save with protocol=4 for compatibility
-with open('iri.pkl', 'wb') as f:
-    pickle.dump(model, f, protocol=4)
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Model Accuracy: {accuracy:.2f}")
+
+# Save the trained model to a pickle file
+with open('iris.pkl', 'wb') as file:
+    pickle.dump(model, file)
+
+print("Model saved as iris_model.pkl")
