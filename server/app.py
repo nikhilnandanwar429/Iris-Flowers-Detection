@@ -21,16 +21,13 @@ CORS(app)
 
 # Load model
 try:
-    with open('iri.pkl', 'rb') as f:
+    with open('iris.pkl', 'rb') as f:
         model = pickle.load(f)
     print("Model loaded successfully")
 except Exception as e:
     print(f"Error loading model: {str(e)}")
     model = None
 
-@app.route('/health', methods=['GET'])
-def health_check():
-    return jsonify({'status': 'healthy'}), 200
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -42,16 +39,28 @@ def predict():
         if not data:
             return jsonify({'error': 'No data provided'}), 400
             
-        required_fields = ['a', 'b', 'c', 'd']
+        required_fields = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
         if not all(field in data for field in required_fields):
             return jsonify({'error': 'Missing required fields'}), 400
             
         arr = np.array([
-            [float(data['a']), float(data['b']), 
-            float(data['c']), float(data['d'])]
+            [float(data['sepal_length']), float(data['sepal_width']), 
+            float(data['petal_length']), float(data['petal_width'])]
         ])
         pred = model.predict(arr)
-        return jsonify({'prediction': int(pred[0])})
+        probabilities = model.predict_proba(arr)[0]
+        
+        species_names = ['Iris Setosa', 'Iris Versicolor', 'Iris Virginica']
+        species_probabilities = {
+            species_names[i]: float(probabilities[i])
+            for i in range(len(species_names))
+        }
+        
+        return jsonify({
+            'species': species_names[int(pred[0])],
+            'confidence': float(max(probabilities)),
+            'probabilities': species_probabilities
+        })
     except ValueError as e:
         return jsonify({'error': 'Invalid input data'}), 400
     except Exception as e:
