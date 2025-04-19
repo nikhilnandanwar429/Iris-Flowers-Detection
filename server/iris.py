@@ -25,4 +25,4 @@ print(f"Model Accuracy: {accuracy:.2f}")
 with open('iris.pkl', 'wb') as file:
     pickle.dump(model, file)
 
-print("Model saved as iris_model.pkl")
+print("Model saved as iris.pkl")
